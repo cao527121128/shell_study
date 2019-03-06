@@ -1,0 +1,54 @@
+<domain type='kvm'>
+  <name>qingcloud-firstbox</name>
+  <vcpu>{{cpu_cores}}</vcpu>
+  <memory unit='MiB'>{{memory_size}}</memory>
+  <currentMemory unit='MiB'>{{memory_size}}</currentMemory>
+  <os>
+    <type arch='x86_64' machine='pc'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+  </features>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='none'/>
+      <source file='{{vm_image}}'/>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+    <interface type='bridge'>
+      <mac address='{{mgmt_mac}}'/>
+      <source bridge='{{mgmt_bridge}}'/>
+      <model type='virtio'/>
+    </interface>
+    <interface type='bridge'>
+      <mac address='{{pxe_mac}}'/>
+      <source bridge='{{pxe_bridge}}'/>
+      <model type='virtio'/>
+    </interface>
+    <controller type='usb' index='0'/>
+    <controller type='ide' index='0'/>
+    <controller type='virtio-serial' index='0'/>
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <input type='tablet' bus='usb'/>
+    <input type='mouse' bus='ps2'/>
+    <graphics type='vnc' autoport='yes'>
+      <listen type='address' address='{{physical_host}}'/>
+    </graphics>
+    <video>
+      <model type='vga' vram='9216' heads='1'/>
+    </video>
+    <memballoon model='virtio'/>
+  </devices>
+</domain>

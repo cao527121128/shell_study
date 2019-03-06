@@ -1,0 +1,18 @@
+[uwsgi]
+
+uid = root
+gid = root
+
+socket = /var/run/webinstaller.sock
+chmod-socket = 777
+
+chdir = /pitrix/lib/pitrix-webinstaller/server/mysite
+module = wsgi:application
+buffer-size = 65535
+
+workers = 5
+master = true
+pidfile = /var/run/webinstaller.pid
+
+disable-logging = true
+daemonize = /var/log/webinstaller.log
